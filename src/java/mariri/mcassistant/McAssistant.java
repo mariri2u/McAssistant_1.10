@@ -3,6 +3,7 @@ package mariri.mcassistant;
 import mariri.mcassistant.handler.BlockBreakEventHandler;
 import mariri.mcassistant.handler.EntityInteractHandler;
 import mariri.mcassistant.handler.EntityJoinWorldHandler;
+import mariri.mcassistant.handler.EntityMountHandler;
 import mariri.mcassistant.handler.PlayerClickHandler;
 import mariri.mcassistant.helper.Comparator;
 import mariri.mcassistant.helper.CropReplanter;
@@ -24,8 +25,8 @@ import net.minecraftforge.oredict.OreDictionary;
 public class McAssistant {
 
         public static final String MODID = "McAssistant";
-        public static final String VERSION = "1.10.0-1.0";
-        
+        public static final String VERSION = "1.10.2-1.2";
+
         private static final String CATEGORY_BREEDASSIST = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "breedassist";
         private static final String CATEGORY_CROPASSIST = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "cropassist";
         private static final String CATEGORY_CROPASSIST_AREA = CATEGORY_CROPASSIST + Configuration.CATEGORY_SPLITTER + "area";
@@ -43,6 +44,7 @@ public class McAssistant {
         private static final String CATEGORY_BEDASSIST = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "bedassist";
         private static final String CATEGORY_CULTIVATEASSIST = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "cultivateassist";
         private static final String CATEGORY_CULTIVATEASSIST_AREAPLUS = CATEGORY_CULTIVATEASSIST + Configuration.CATEGORY_SPLITTER + "areaplus";
+        private static final String CATEGORY_SHEARASSIST = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "shearassist";
 
         private static final String CATEGORY_MISC = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "misc";
 
@@ -62,6 +64,8 @@ public class McAssistant {
         private static final String CATEGORY_SAPLING = CATEGORY_ITEM_REGISTER + Configuration.CATEGORY_SPLITTER + "sapling";
         private static final String CATEGORY_LEAVE = CATEGORY_ITEM_REGISTER + Configuration.CATEGORY_SPLITTER + "leave";
         private static final String CATEGORY_FEED = CATEGORY_ITEM_REGISTER + Configuration.CATEGORY_SPLITTER + "feed";
+        private static final String CATEGORY_SHEAR = CATEGORY_ITEM_REGISTER + Configuration.CATEGORY_SPLITTER + "shear";
+        private static final String CATEGORY_MOUNT = CATEGORY_ITEM_REGISTER + Configuration.CATEGORY_SPLITTER + "mount";
         private static final String CATEGORY_ORE_DICTIONARY = CATEGORY_ITEM_REGISTER + Configuration.CATEGORY_SPLITTER + "oreDictionary";
 
 //        private static final String COMMENT_BOOLEAN = "true / false";
@@ -71,16 +75,16 @@ public class McAssistant {
         private static final String COMMENT_ID_LV_TIME = "ID:Lv:Time (,PotionID:Lv:Time,...)";
         private static final String COMMENT_MIN_MAX = "0:disable, MinLv(:MaxLv)";
         private static final String COMMENT_HUNGER = "between 0 to 20";
-        
+
         private String[] registOreDictionaryList;
-        
+
         @EventHandler
         public void preInit(FMLPreInitializationEvent event) {
             Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 	        config.load();
-	        
+
 	        Property prop;
-	        
+
 	        // CutdownAssist
 	        prop = config.get(Configuration.CATEGORY_GENERAL, "cutdownEnable", true);
 	        BlockBreakEventHandler.CUTDOWN_ENABLE = prop.getBoolean(true);
@@ -139,7 +143,7 @@ public class McAssistant {
 	        // FlatAssist
 	        prop = config.get(Configuration.CATEGORY_GENERAL, "flatassistEnable", true);
 	        BlockBreakEventHandler.FLATASSIST_ENABLE = prop.getBoolean(true);
-	        
+
 	        prop = config.get(CATEGORY_FLATASSIST, "flatassistHarvestableEnable", true);
 	        BlockBreakEventHandler.FLATASSIST_HARVESTABLE_ENABLE = prop.getBoolean(true);
 	        prop = config.get(CATEGORY_FLATASSIST_HARVESTABLE, "requirePotionId", 3);
@@ -181,7 +185,7 @@ public class McAssistant {
 	        BlockBreakEventHandler.FLATASSIST_DIRT_MAX_RADIUS = prop.getInt();
 	        prop = config.get(CATEGORY_FLATASSIST_DIRT, "breakAnything", false);
 	        BlockBreakEventHandler.FLATASSIST_DIRT_BREAK_ANYTHING = prop.getBoolean(false);
-	        
+
 	        prop = config.get(CATEGORY_FLATASSIST, "flatassistStoneEnable", false);
 	        BlockBreakEventHandler.FLATASSIST_STONE_ENABLE = prop.getBoolean(false);
 	        prop = config.get(CATEGORY_FLATASSIST_STONE, "requirePotionId", 3);
@@ -202,7 +206,7 @@ public class McAssistant {
 	        BlockBreakEventHandler.FLATASSIST_STONE_MAX_RADIUS = prop.getInt();
 	        prop = config.get(CATEGORY_FLATASSIST_STONE, "breakAnything", false);
 	        BlockBreakEventHandler.FLATASSIST_STONE_BREAK_ANYTHING = prop.getBoolean(false);
-	      
+
 	        prop = config.get(CATEGORY_FLATASSIST, "flatassistWoodEnable", false);
 	        BlockBreakEventHandler.FLATASSIST_WOOD_ENABLE = prop.getBoolean(false);
 	        prop = config.get(CATEGORY_FLATASSIST_WOOD, "requirePotionId", 3);
@@ -245,11 +249,11 @@ public class McAssistant {
 	        prop = config.get(CATEGORY_CROPASSIST_AREAPLUS, "requireToolLevel", "3");
 	        prop.setComment(COMMENT_MIN_MAX);
 	        PlayerClickHandler.CROPASSIST_AREAPLUS_REQUIRE_TOOL_LEVEL = Lib.stringToInt(prop.getString(), ":");
-	        
+
 	        // TorchAssist
 	        prop = config.get(Configuration.CATEGORY_GENERAL, "torchassistEnable", false);
 	        PlayerClickHandler.TORCHASSIST_ENABLE = prop.getBoolean(false);
-	        
+
 	        // LeaveAssist
 	        prop = config.get(Configuration.CATEGORY_GENERAL, "leaveassistEnable", true);
 	        PlayerClickHandler.LEAVEASSIST_ENABLE = prop.getBoolean(true);
@@ -273,7 +277,7 @@ public class McAssistant {
 	        PlayerClickHandler.BEDASSIST_NO_SLEEP = prop.getBoolean(false);
 	        prop = config.get(CATEGORY_BEDASSIST, "noSleepMessage", "You can't sleep!!");
 	        PlayerClickHandler.BEDASSIST_NO_SLEEP_MESSAGE = prop.getString();
-     
+
 	        // BreedAssist
 	        prop = config.get(Configuration.CATEGORY_GENERAL, "breedassistEnable", true);
 	        EntityInteractHandler.BREEDASSIST_ENABLE = prop.getBoolean(true);
@@ -282,7 +286,16 @@ public class McAssistant {
 	        prop = config.get(CATEGORY_BREEDASSIST, "affectPotion", "");
 	        prop.setComment(COMMENT_ID_LV_TIME);
 	        EntityInteractHandler.BREEDASSIST_AFFECT_POTION = Lib.stringToInt(prop.getString(), ",", ":");
-	        
+
+	        // ShearAssist
+	        prop = config.get(Configuration.CATEGORY_GENERAL, "shearassistEnable", true);
+	        EntityInteractHandler.SHEARASSIST_ENABLE = prop.getBoolean(true);
+	        prop = config.get(CATEGORY_SHEARASSIST, "maxRadius", 2);
+	        EntityInteractHandler.SHEARASSIST_RADIUS = prop.getInt();
+	        prop = config.get(CATEGORY_SHEARASSIST, "affectPotion", "");
+	        prop.setComment(COMMENT_ID_LV_TIME);
+	        EntityInteractHandler.SHEARASSIST_AFFECT_POTION = Lib.stringToInt(prop.getString(), ",", ":");
+
 	        // CultivateAssist
 	        prop = config.get(Configuration.CATEGORY_GENERAL, "cultivateassistEnable", true);
 	        PlayerClickHandler.CULTIVATEASSIST_ENABLE = prop.getBoolean(true);
@@ -297,14 +310,19 @@ public class McAssistant {
 	        prop = config.get(CATEGORY_CULTIVATEASSIST_AREAPLUS, "requireToolLevel", "3");
 	        prop.setComment(COMMENT_MIN_MAX);
 	        PlayerClickHandler.CULTIVATEASSIST_AREAPLUS_REQUIRE_TOOL_LEVEL = Lib.stringToInt(prop.getString(), ":");
-   
+
+	        // ShearAssist
+	        prop = config.get(Configuration.CATEGORY_GENERAL, "mountassistEnable", true);
+	        EntityJoinWorldHandler.MOUNTASSIST_ENABLE = prop.getBoolean(true);
+	        EntityMountHandler.MOUNTASSIST_ENABLE = EntityJoinWorldHandler.MOUNTASSIST_ENABLE;
+
 	        // Converter
 	        prop = config.get(Configuration.CATEGORY_GENERAL, "autounifyEnable", true);
 	        EntityJoinWorldHandler.UNIFY_ENEBLE = prop.getBoolean(true);
-	        
+
 	        // misc
 	        prop = config.get(CATEGORY_MISC, "compareToolClass", true);
-	        Lib.COMPARE_TOOL_CLASSS = prop.getBoolean(true);	        
+	        Lib.COMPARE_TOOL_CLASSS = prop.getBoolean(true);
 	        prop = config.get(CATEGORY_MISC, "compareIsHarvestable", true);
 	        Lib.COMPARE_IS_HARVESTABLE = prop.getBoolean(true);
 	        prop = config.get(CATEGORY_MISC, "sneakInvertOnBlockBreak", false);
@@ -315,10 +333,14 @@ public class McAssistant {
 	        PlayerClickHandler.SNEAK_INVERT = prop.getBoolean(false);
 	        prop = config.get(CATEGORY_MISC, "sneakInvertOnInteract", false);
 	        prop.setComment("Breedassist");
-	        EntityInteractHandler.SNEAK_INVERT = prop.getBoolean(false);	        
-	        
+	        EntityInteractHandler.SNEAK_INVERT = prop.getBoolean(false);
+	        prop = config.get(CATEGORY_MISC, "sneakInvertOnMount", false);
+	        prop.setComment("Mountassist");
+	        EntityJoinWorldHandler.SNEAK_INVERT = prop.getBoolean(false);
+
 	        // RegisterItem
 	        Comparator.UNIFY.registerOreDict(Lib.splitAndTrim(config.get(CATEGORY_UNIFY, "oreDictionary", "ore.*,").getString(), ","));
+	        Comparator.UNIFY.registerDisallow(Lib.splitAndTrim(config.get(CATEGORY_UNIFY, "disallow", "").getString(), ","));
 	        Comparator.AXE.registerName(Lib.splitAndTrim(config.get(CATEGORY_AXE, "names", "").getString(), ","));
 	        Comparator.AXE.registerClass(Lib.splitAndTrim(config.get(CATEGORY_AXE, "classes", ".*ItemAxe.*").getString(), ","));
 	        Comparator.AXE.registerOreDict(Lib.splitAndTrim(config.get(CATEGORY_AXE, "oreDictionary", "").getString(), ","));
@@ -375,15 +397,22 @@ public class McAssistant {
 	        Comparator.FEED.registerClass(Lib.splitAndTrim(config.get(CATEGORY_FEED, "classes", "").getString(), ","));
 	        Comparator.FEED.registerOreDict(Lib.splitAndTrim(config.get(CATEGORY_FEED, "oreDictionary", "").getString(), ","));
 	        Comparator.FEED.registerDisallow(Lib.splitAndTrim(config.get(CATEGORY_FEED, "disallow", "").getString(), ","));
+	        Comparator.SHEAR.registerName(Lib.splitAndTrim(config.get(CATEGORY_SHEAR, "names", ".*shear.*").getString(), ","));
+	        Comparator.SHEAR.registerClass(Lib.splitAndTrim(config.get(CATEGORY_SHEAR, "classes", "").getString(), ","));
+	        Comparator.SHEAR.registerOreDict(Lib.splitAndTrim(config.get(CATEGORY_SHEAR, "oreDictionary", "").getString(), ","));
+	        Comparator.SHEAR.registerDisallow(Lib.splitAndTrim(config.get(CATEGORY_SHEAR, "disallow", "").getString(), ","));
+	        Comparator.MOUNT.registerName(Lib.splitAndTrim(config.get(CATEGORY_MOUNT, "names", "").getString(), ","));
+	        Comparator.MOUNT.registerClass(Lib.splitAndTrim(config.get(CATEGORY_MOUNT, "classes", ".*EntityMinecartEmpty.*, .*EntityBoat.*").getString(), ","));
+	        Comparator.MOUNT.registerDisallow(Lib.splitAndTrim(config.get(CATEGORY_MOUNT, "disallow", "").getString(), ","));
 	        registOreDictionaryList = config.get(CATEGORY_ORE_DICTIONARY, "values", new String[] { "" } ).getStringList();
-	        
+
 	        config.save();
         }
-        
+
         @EventHandler
         public void postInit(FMLPostInitializationEvent event) {
         }
-        
+
         @EventHandler
         public void init(FMLInitializationEvent event) {
 
@@ -391,22 +420,27 @@ public class McAssistant {
         	if(BlockBreakEventHandler.isEventEnable()){
         		MinecraftForge.EVENT_BUS.register(BlockBreakEventHandler.INSTANCE);
         	}
-                    	
-        	// Unifier
+
+        	// Unifier, MountAssist
         	if(EntityJoinWorldHandler.isEventEnable()){
         		MinecraftForge.EVENT_BUS.register(EntityJoinWorldHandler.INSTANCE);
         	}
-        	
+
+        	// MountAssist
+        	if(EntityMountHandler.isEventEnable()){
+        		MinecraftForge.EVENT_BUS.register(EntityMountHandler.INSTANCE);
+        	}
+
         	// TorchAssist, Bedassist, Cropassist, Leaveassist
         	if(PlayerClickHandler.isEventEnable()){
         		MinecraftForge.EVENT_BUS.register(PlayerClickHandler.INSTANCE);
         	}
-        	
+
         	// BreedAssist
         	if(EntityInteractHandler.isEventEnable()){
         		MinecraftForge.EVENT_BUS.register(EntityInteractHandler.INSTANCE);
         	}
-        	
+
         	// OreDictionary Regist
         	try{
 	        	for(String value : registOreDictionaryList){

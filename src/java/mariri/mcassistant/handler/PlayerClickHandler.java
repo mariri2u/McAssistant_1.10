@@ -18,7 +18,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -28,15 +27,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerClickHandler {
-	
+
 	public static PlayerClickHandler INSTANCE = new PlayerClickHandler();
-	
+
 	public static boolean TORCHASSIST_ENABLE;
-	
+
 	public static boolean CROPASSIST_ENABLE = true;
 	public static int CROPASSIST_REQUIRE_TOOL_LEVEL;
 	public static boolean CROPASSIST_AREA_ENABLE;
@@ -44,28 +42,28 @@ public class PlayerClickHandler {
 	public static int[][] CROPASSIST_AREA_AFFECT_POTION;
 	public static boolean CROPASSIST_AREAPLUS_ENABLE;
 	public static int[] CROPASSIST_AREAPLUS_REQUIRE_TOOL_LEVEL;
-	
+
 	public static boolean LEAVEASSIST_ENABLE;
 	public static int[][] LEAVEASSIST_AFFECT_POTION;
 	public static boolean LEAVEASSIST_AREAPLUS_ENABLE;
 	public static int[] LEAVEASSIST_AREAPLUS_REQUIRE_TOOL_LEVEL;
-	
+
 	public static boolean BEDASSIST_ENABLE;
 	public static boolean BEDASSIST_SET_RESPAWN_ANYTIME;
 	public static String BEDASSIST_SET_RESPAWN_MESSAGE;
 	public static boolean BEDASSIST_NO_SLEEP;
 	public static String BEDASSIST_NO_SLEEP_MESSAGE;
-	
+
 	public static boolean CULTIVATEASSIST_ENABLE;
 	public static int[] CULTIVATEASSIST_REQUIRE_TOOL_LEVEL;
 	public static int[][] CULTIVATEASSIST_AFFECT_POTION;
 	public static boolean CULTIVATEASSIST_AREAPLUS_ENABLE;
 	public static int[] CULTIVATEASSIST_AREAPLUS_REQUIRE_TOOL_LEVEL;
-	
+
 	public static boolean SNEAK_INVERT;
-	
+
 	private static List<EntityPlayer> isProcessing = new ArrayList<EntityPlayer>();
-	
+
 	private PlayerClickHandler(){}
 
 	@SubscribeEvent
@@ -98,7 +96,7 @@ public class PlayerClickHandler {
 			if(BEDASSIST_SET_RESPAWN_ANYTIME){
 //	        	ChunkCoordinates respawn = new ChunkCoordinates(e.x, e.y, e.z);
 	            if (	world.provider.canRespawnHere() &&
-	            		world.getBiomeGenForCoords(e.getPos()) != Biomes.HELL &&
+	            		world.getBiomeForCoordsBody(e.getPos()) != Biomes.HELL &&
 	            		world.provider.isSurfaceWorld() &&
 	            		e.getEntityPlayer().isEntityAlive() &&
 	            		world.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(e.getPos().getX() - 8, e.getPos().getY() - 5, e.getPos().getZ() - 8, e.getPos().getX() + 8, e.getPos().getY() + 5, e.getPos().getZ() + 8)).isEmpty()){
@@ -188,20 +186,20 @@ public class PlayerClickHandler {
 				}
 			}
 			world.playSound(e.getEntityPlayer(), e.getPos(), SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            
+
 			ItemStack citem = e.getEntityPlayer().inventory.getCurrentItem();
 			citem.getItem().onBlockDestroyed(citem, world, state, e.getPos(), e.getEntityPlayer());
 			if(citem.stackSize <= 0){
 				e.getEntityPlayer().inventory.deleteStack(e.getEntityPlayer().inventory.getCurrentItem());
 				world.playSound(e.getEntityPlayer(), e.getPos(), new SoundEvent(new ResourceLocation("random.break")), SoundCategory.PLAYERS, 1.0F, 1.0F);
-			}            
+			}
 			Lib.affectPotionEffect(e.getEntityPlayer(), LEAVEASSIST_AFFECT_POTION, count);
 			e.setCanceled(true);
 		}
 		// トーチ補助機能
 		else if(		TORCHASSIST_ENABLE &&
 				(Lib.isPickaxeOnEquip(e.getEntityPlayer()) || Lib.isShovelOnEquip(e.getEntityPlayer())) ){
-			
+
 			ItemStack current = e.getEntityPlayer().inventory.getCurrentItem();
 			ItemStack torch = new ItemStack(Blocks.TORCH, 1);
 			// トーチを持っている場合
@@ -229,7 +227,7 @@ public class PlayerClickHandler {
 			}
 		}
 	}
-	
+
 	private void onLeftClickBlock(PlayerInteractEvent e){
 		World world = e.getEntityPlayer().worldObj;
 		IBlockState state = world.getBlockState(e.getPos());
@@ -276,7 +274,7 @@ public class PlayerClickHandler {
 			e.setCanceled(true);
 		}
 	}
-	
+
 	public static boolean isEventEnable(){
 		return BEDASSIST_ENABLE || CROPASSIST_ENABLE || LEAVEASSIST_ENABLE || TORCHASSIST_ENABLE;
 	}

@@ -24,29 +24,12 @@ public class McAssistantConfigGui extends GuiConfig {
 	}
 
 	private static List<IConfigElement> getConfigElements(){
-//		List<IConfigElement> list = Lists.newArrayList();
-//
-//
-//		return list;
-
 		List<IConfigElement> list = new ArrayList<IConfigElement>();
-//		list.add(new DummyCategoryElement("general", McAssistant.CONFIG_LANG, GeneralConfigEntry.class));
 		list.add(new DummyCategoryElement("itemRegister", McAssistant.MODID + ".itemRegister", RegisterConfigEntry.class));
-
-//		ConfigElement elm = new ConfigElement(McAssistant.CONFIG.getCategory(Configuration.CATEGORY_GENERAL));
-//
-//
-//		for(String category : McAssistant.CONFIG.getCategoryNames()){
-//			list.addAll(new ConfigElement(McAssistant.CONFIG.getCategory(category)).getChildElements());
-//		}
 
 		for(IConfigElement elm :  new ConfigElement(McAssistant.CONFIG.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements()){
 			list.add(elm);
 		}
-//
-//		for(IConfigElement elm :  new ConfigElement(McAssistant.config.getCategory(McAssistant.CATEGORY_ITEM_REGISTER)).getChildElements()){
-//			list.add(elm);
-//		}
 
 		return list;
 	}

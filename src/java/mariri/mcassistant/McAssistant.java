@@ -91,23 +91,23 @@ public class McAssistant {
         		"Wood and Gold: 0, Stone: 1, Iron: 2, Diamond: 3" + BR +
         		"(You can specify lower and upper limits separated by commas.)";
         private static final String COMMENT_AFFECT_POTION =
-        		"Status effect given to players at the time of collective destruction" + BR +
-        		"(Multiple designations are possible, separated by commas)" + BR +
+        		"When of collective destruction, what potion effects given to player" + BR +
+        		"(Multiple potion effects are possible, separated by commas)" + BR +
         		"StatusID:Level:Duration (,StatusID:Level:Duration,...)";
         private static final String COMMENT_REQUIRE_HUNGER = "Threshold of satiety to enable collective destruction (0-20)";
         private static final String COMMENT_REQUIRE_POTION_LEVEL = "Potion effect and level enabling collective destruction" + BR + "StatusID:Level";
         private static final String COMMENT_REQUIRE_POTION_ID =
-        		"Potion effect enabling collective destruction" + BR +
-        		"As the effect level rises the destruction range expands" + BR +
+        		"Potion effect is enabling to collective destruction" + BR +
+        		"As the effect level rised the destruction range expands" + BR +
         		"(1: 3*3, 2: 5*5, ...)";
         private static final String COMMENT_REQUIRE_ENCHANT_LEVEL = "Enchant effect and level enabling collective destruction" + BR + "EnchantID:Level";
         private static final String COMMENT_REQUIRE_ENCHANT_ID =
-        		"Enchant effect enabling collective destruction" + BR +
-        		"As the effect level rises the destruction range expands" + BR +
+        		"Enchant effect is enabling to collective destruction" + BR +
+        		"As the effect level rised the destruction range expands" + BR +
         		"(1: 3*3, 2: 5*5, ...)";
         private static final String COMMENT_MAX_RADIUS = "It limits the maximum range of collective destruction" + BR + "(1: 3*3, 2: 5*5, ...)";
-        private static final String COMMENT_BREAK_BELOW = "Whether to break below blocks as the target of collective destruction";
-        private static final String COMMENT_BREAK_ANYTHING = "Whether or not to harvest another type blocks too";
+        private static final String COMMENT_BREAK_BELOW = "Whether to break below blocks on the target by collective destruction";
+        private static final String COMMENT_BREAK_ANYTHING = "Whether or not to break another type blocks too";
 
 
         private String[] registOreDictionaryList;
@@ -185,19 +185,19 @@ public class McAssistant {
 
 	        // CutdownAssist
 	        BlockBreakEventHandler.CUTDOWN_ENABLE = CONFIG.get(Configuration.CATEGORY_GENERAL, "cutdownEnable", true,
-	        		"Lumberjack by any axes").getBoolean(true);
+	        		"Assist to lumberjack by any axes").getBoolean(true);
 	        BlockBreakEventHandler.CUTDOWN_FROM_TOP_ENABLE =
 	        		CONFIG.get(Configuration.CATEGORY_GENERAL, "cutdownBreakFromTopEnable", true,
-	        				"Whether to enable the lumberjack function to break in order from the top").getBoolean(true);
+	        				"Whether enable to break wood in order from the top").getBoolean(true);
 	        BlockBreakEventHandler.CUTDOWN_CHAIN = CONFIG.get(Configuration.CATEGORY_GENERAL, "cutdownChainEnable", true,
-	        		"Enchanted efficiency axes effect wide range").getBoolean(true);
-	        CONFIG.addCustomCategoryComment(CATEGORY_CUTDOWN, "Lumberjack by any axes");
+	        		"Axe that given the efficiency enchant is enable to collective destruction").getBoolean(true);
+	        CONFIG.addCustomCategoryComment(CATEGORY_CUTDOWN, "Assist to lumberjack by any axes");
 	        BlockBreakEventHandler.CUTDOWN_MAX_DISTANCE = CONFIG.get(CATEGORY_CUTDOWN, "maxRadius", 30,
 	        		COMMENT_MAX_RADIUS).getInt();
 	        BlockBreakEventHandler.CUTDOWN_BELOW =  CONFIG.get(CATEGORY_CUTDOWN, "breakBelow", false,
 	        		COMMENT_BREAK_BELOW).getBoolean(false);
 	        BlockBreakEventHandler.CUTDOWN_ONLY_ROOT = CONFIG.get(CATEGORY_CUTDOWN, "onlyRoot", true,
-	        		"Enable lumberjack assistance only when the root log (directly below the dirt block) is destroyed").getBoolean(true);
+	        		"Enable to assist lumberjack only time of breaking root log (on DIRT kind of  block only)").getBoolean(true);
 	        CONFIG.addCustomCategoryComment(CATEGORY_CUTDOWN_CHAIN, "Enchanted efficiency axes effect wide range");
 	        BlockBreakEventHandler.CUTDOWN_CHAIN_REQUIRE_POTION_LEVEL = Lib.stringToInt(CONFIG.get(CATEGORY_CUTDOWN_CHAIN, "requirePotionLevel", "",
 	        		COMMENT_REQUIRE_POTION_LEVEL).getString(), ":");
@@ -210,11 +210,11 @@ public class McAssistant {
 	        BlockBreakEventHandler.CUTDOWN_CHAIN_REQUIRE_ENCHANT_LEVEL = Lib.stringToInt(CONFIG.get(CATEGORY_CUTDOWN_CHAIN, "requireEnchantLevel", "32:1",
 	        		COMMENT_REQUIRE_ENCHANT_LEVEL).getString(), ":");
 	        BlockBreakEventHandler.CUTDOWN_CHAIN_BREAK_LEAVES = CONFIG.get(CATEGORY_CUTDOWN_CHAIN, "breakLeaves", true,
-	        		"Whether the leaf block will also be destroyed").getBoolean(true);
+	        		"Whether the leaf blocks also to be destroying too").getBoolean(true);
 	        BlockBreakEventHandler.CUTDOWN_CHAIN_REPLANT = CONFIG.get(CATEGORY_CUTDOWN_CHAIN, "autoReplant", true,
-	        		"Whether or not to replant the dropped sapling automatically when the leaf block breaks").getBoolean(true);
+	        		"Whether or not to replant the dropped sapling automatically when the leaf block are harvested").getBoolean(true);
 	        BlockBreakEventHandler.CUTDOWN_CHAIN_MAX_HORIZONAL_DISTANCE = CONFIG.get(CATEGORY_CUTDOWN_CHAIN, "maxHorizonalRadius", 2,
-	        		"Specify the horizonal limit distance when leaf block breaks").getInt();
+	        		"Specify the horizonal limit distance when leaf block breaking").getInt();
 
 	        // MineAssist
 	        BlockBreakEventHandler.MINEASSIST_ENABLE = CONFIG.get(Configuration.CATEGORY_GENERAL, "mineassistEnable", true,
@@ -234,9 +234,9 @@ public class McAssistant {
 	        		COMMENT_REQUIRE_ENCHANT_LEVEL).getString(), ":");
 
 	        // FlatAssist
-	        CONFIG.addCustomCategoryComment(CATEGORY_FLATASSIST, "Break any blocks in wide range when haste potion affected");
+	        CONFIG.addCustomCategoryComment(CATEGORY_FLATASSIST, "Break any blocks in wide range when given haste potion effect");
 	        BlockBreakEventHandler.FLATASSIST_ENABLE = CONFIG.get(Configuration.CATEGORY_GENERAL, "flatassistEnable", true,
-	        		"Break any blocks in wide range when haste potion affected").getBoolean(true);
+	        		"Break any blocks in wide range when given haste potion effect").getBoolean(true);
 
 	        CONFIG.addCustomCategoryComment(CATEGORY_FLATASSIST_HARVESTABLE, "For all harvestable blocks");
 	        BlockBreakEventHandler.FLATASSIST_HARVESTABLE_ENABLE = CONFIG.get(CATEGORY_FLATASSIST, "flatassistHarvestableEnable", true,
@@ -332,9 +332,9 @@ public class McAssistant {
 	        PlayerClickHandler.CROPASSIST_AREA_AFFECT_POTION = Lib.stringToInt(CONFIG.get(CATEGORY_CROPASSIST, "affectPotion", "",
 	        		COMMENT_AFFECT_POTION).getString(), ",", ":");
 	        CropReplanter.CROPASSIST_SUPLY = CONFIG.get(CATEGORY_CROPASSIST, "suplyFromInventory", true,
-	        		"Whether to use seeds in the inventory when not dropping seed (Wheat only)").getBoolean(true);
+	        		"Whether to use a seed in the inventory when not dropped seeds (Wheat only)").getBoolean(true);
 	        CropReplanter.CROPASSIST_AUTOCRAFT = CONFIG.get(CATEGORY_CROPASSIST, "autoCraft", true,
-	        		"Whether to do automatic craft from crop to seed for replanting").getBoolean(true);
+	        		"Whether to do automatic craft from crop to seed one time for replanting").getBoolean(true);
 	        PlayerClickHandler.CROPASSIST_AREAPLUS_ENABLE =CONFIG.get(CATEGORY_CROPASSIST_AREAPLUS, "areaPlusEnable", true,
 	        		"Greater than diamond hoes effect wide range").getBoolean(true);
 	        PlayerClickHandler.CROPASSIST_AREAPLUS_REQUIRE_TOOL_LEVEL = Lib.stringToInt(CONFIG.get(CATEGORY_CROPASSIST_AREAPLUS, "requireToolLevel", "3",
@@ -367,7 +367,7 @@ public class McAssistant {
 
 	        // BreedAssist
 	        EntityInteractHandler.BREEDASSIST_ENABLE = CONFIG.get(Configuration.CATEGORY_GENERAL, "breedassistEnable", true,
-	        		"Animal breeding can  wide range on right click by feeds").getBoolean(true);
+	        		"Animal breeding can wide range on right click by feeds").getBoolean(true);
 	        CONFIG.addCustomCategoryComment(CATEGORY_BREEDASSIST, "Animal breeding can  wide range on right click by feeds");
 	        EntityInteractHandler.BREEDASSIST_RADIUS = CONFIG.get(CATEGORY_BREEDASSIST, "maxRadius", 2,
 	        		COMMENT_MAX_RADIUS).getInt();
@@ -376,7 +376,7 @@ public class McAssistant {
 
 	        // ShearAssist
 	        EntityInteractHandler.SHEARASSIST_ENABLE = CONFIG.get(Configuration.CATEGORY_GENERAL, "shearassistEnable", true,
-	        		"Sheep shearing can  wide range on right click by shear ").getBoolean(true);
+	        		"Sheep shearing can wide range on right click by shear ").getBoolean(true);
 	        CONFIG.addCustomCategoryComment(CATEGORY_SHEARASSIST, "Sheep shearing can  wide range on right click by shear ");
 	        EntityInteractHandler.SHEARASSIST_RADIUS = CONFIG.get(CATEGORY_SHEARASSIST, "maxRadius", 2,
 	        		COMMENT_MAX_RADIUS).getInt();
@@ -393,14 +393,14 @@ public class McAssistant {
 	        		COMMNET_REQUIRE_TOOL_LEVEL).getString(), ":");
 	        CONFIG.addCustomCategoryComment(CATEGORY_CULTIVATEASSIST_AREAPLUS, "Greater than diamond hoes effect more wide range");
 	        PlayerClickHandler.CULTIVATEASSIST_AREAPLUS_ENABLE = CONFIG.get(CATEGORY_CULTIVATEASSIST_AREAPLUS, "areaPlusEnable", true,
-	        		"Greater than diamond hoes effect more wide range").getBoolean(true);
+	        		"Greater than diamond hoes are able to cultivate more wide range").getBoolean(true);
 	        PlayerClickHandler.CULTIVATEASSIST_AREAPLUS_REQUIRE_TOOL_LEVEL = Lib.stringToInt(CONFIG.get(CATEGORY_CULTIVATEASSIST_AREAPLUS, "requireToolLevel", "3",
 	        		COMMNET_REQUIRE_TOOL_LEVEL).getString(), ":");
 
 
 	        // MountAssist
 	        EntityJoinWorldHandler.MOUNTASSIST_ENABLE = CONFIG.get(Configuration.CATEGORY_GENERAL, "mountassistEnable", true,
-	        		"Mounting automatically when you place a vehicle, returning to inventory when you dismount.").getBoolean(true);
+	        		"Mounting automatically when you place a vehicles, and returning to inventory it when you dismount.").getBoolean(true);
 	        EntityMountHandler.MOUNTASSIST_ENABLE = EntityJoinWorldHandler.MOUNTASSIST_ENABLE;
 
 	        // Converter
@@ -409,9 +409,12 @@ public class McAssistant {
 
 	        // misc
 	        CONFIG.addCustomCategoryComment(CATEGORY_MISC, "miscellaneous");
-	        Lib.COMPARE_TOOL_CLASSS = CONFIG.get(CATEGORY_MISC, "compareToolClass", true).getBoolean(true);
-	        Lib.COMPARE_IS_HARVESTABLE = CONFIG.get(CATEGORY_MISC, "compareIsHarvestable", true).getBoolean(true);
-	        BlockBreakEventHandler.SNEAK_INVERT = CONFIG.get(CATEGORY_MISC, "sneakInvert", false).getBoolean(false);
+	        Lib.COMPARE_TOOL_CLASSS = CONFIG.get(CATEGORY_MISC, "compareToolClass", true,
+	        		"Please set it to false when conflict occurs").getBoolean(true);
+	        Lib.COMPARE_IS_HARVESTABLE = CONFIG.get(CATEGORY_MISC, "compareIsHarvestable", true,
+	        		"Please set it to false when conflict occurs").getBoolean(true);
+	        BlockBreakEventHandler.SNEAK_INVERT = CONFIG.get(CATEGORY_MISC, "sneakInvert", false,
+	        		"In default, some of the functions are disabled when sneaking, but setting this to true makes it enable only when you are sneaked").getBoolean(false);
 	        PlayerClickHandler.SNEAK_INVERT =  BlockBreakEventHandler.SNEAK_INVERT;
 	        EntityInteractHandler.SNEAK_INVERT =  BlockBreakEventHandler.SNEAK_INVERT;
 	        EntityJoinWorldHandler.SNEAK_INVERT =  BlockBreakEventHandler.SNEAK_INVERT;
@@ -482,7 +485,9 @@ public class McAssistant {
 	        Comparator.MOUNT.registerName(Lib.splitAndTrim(CONFIG.get(CATEGORY_MOUNT, "names", "").getString(), ","));
 	        Comparator.MOUNT.registerClass(Lib.splitAndTrim(CONFIG.get(CATEGORY_MOUNT, "classes", ".*EntityMinecartEmpty.*, .*EntityBoat.*").getString(), ","));
 	        Comparator.MOUNT.registerDisallow(Lib.splitAndTrim(CONFIG.get(CATEGORY_MOUNT, "disallow", "").getString(), ","));
-	        registOreDictionaryList = CONFIG.get(CATEGORY_ORE_DICTIONARY, "values", new String[] { "" } ).getStringList();
+	        registOreDictionaryList = CONFIG.get(CATEGORY_ORE_DICTIONARY, "values", new String[] { "" },
+	        		"To regist specific items to ore dictionary, entering one item per line by following format" + BR +
+	        		"OreDictionaryName:ModID:ItemName").getStringList();
 
 	        CONFIG.save();
         }
